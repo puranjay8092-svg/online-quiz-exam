@@ -1,0 +1,48 @@
+{
+    "questions": [
+        {
+            "correctAnswer": 1,
+            "id": 1,
+            "options": [
+                "Python",
+                "C++",
+                "Java",
+                "HTML"
+            ],
+            "question": "Which language is used for this project's backend?"
+        },
+        {
+            "correctAnswer": 0,
+            "id": 2,
+            "options": [
+                "Encapsulation",
+                "Compilation",
+                "Iteration",
+                "Networking"
+            ],
+            "question": "Which OOP concept bundles data and methods together?"
+        },
+        {
+            "correctAnswer": 2,
+            "id": 3,
+            "options": [
+                "<heading>",
+                "<link>",
+                "<button>",
+                "<image>"
+            ],
+            "question": "Which HTML element creates a button?"
+        },
+        {
+            "correctAnswer": 0,
+            "id": 4,
+            "options": [
+                "New Delhi",
+                "Mumbai",
+                "Hyderabad",
+                "Kolkata"
+            ],
+            "question": "What is the capital of India?"
+        }
+    ]
+}

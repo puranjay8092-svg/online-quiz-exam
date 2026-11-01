@@ -15,12 +15,25 @@
     </header>
 
     <main>
-        <section class="panel">
+        <section class="panel" id="welcome">
             <h2>Welcome, Student!</h2>
-            <p>Take an exam and view your score when you finish.</p>
-            <button id="startBtn">Start Quiz</button>
-            <p id="status">Website interface loaded successfully.</p>
+            <p>Enter your details to begin the examination.</p>
+
+            <label for="studentName">Student Name</label>
+            <input type="text" id="studentName" placeholder="Enter your name" required>
+
+            <label for="studentId">Student ID</label>
+            <input type="text" id="studentId" placeholder="Enter your student ID" required>
+
+            <button type="button" id="startBtn">Start Quiz</button>
         </section>
+
+        <p id="status" role="status">Website interface loaded successfully.</p>
+
+        <form id="quizForm" hidden>
+            <div id="questions"></div>
+            <button type="submit">Submit Answers</button>
+        </form>
     </main>
 
     <script src="app.js"></script>

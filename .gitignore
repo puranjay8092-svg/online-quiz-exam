@@ -1,0 +1,13 @@
+# Compiled executable
+/server
+
+# Backup files
+*.backup
+*.before-*
+*.working-backup
+
+# Student results (keep local)
+results.csv
+
+# Temporary files
+*.tmp

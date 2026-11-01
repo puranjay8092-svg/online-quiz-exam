@@ -56,7 +56,8 @@ startButton.addEventListener("click", async () => {
 
         welcome.hidden = true;
         quizForm.hidden = false;
-        status.textContent = `Quiz loaded! ${questions.length} questions are ready.`;
+        status.textContent =
+            `Quiz loaded! ${questions.length} questions are ready.`;
 
     } catch (error) {
         status.textContent = error.message;
@@ -65,9 +66,61 @@ startButton.addEventListener("click", async () => {
     }
 });
 
-quizForm.addEventListener("submit", (event) => {
+quizForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    status.textContent =
-        "Your answers are selected. The next step is connecting submission to the C++ grading API.";
+    const name = document.getElementById("studentName").value.trim();
+    const studentId = document.getElementById("studentId").value.trim();
+
+    const answers = {};
+
+    for (const question of questions) {
+        const selected = quizForm.querySelector(
+            `input[name="question-${question.id}"]:checked`
+        );
+
+        if (!selected) {
+            status.textContent = "Please answer every question.";
+            return;
+        }
+
+        answers[String(question.id)] = Number(selected.value);
+    }
+
+    const submitButton = quizForm.querySelector(
+        'button[type="submit"]'
+    );
+
+    submitButton.disabled = true;
+    status.textContent = "Submitting your answers...";
+
+    try {
+        const response = await fetch("/api/submit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name,
+                studentId,
+                answers
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.error || "Submission failed.");
+        }
+
+        status.textContent =
+            `Quiz submitted successfully! Your score is ${result.score}/${result.total}.`;
+
+        quizForm.hidden = true;
+
+    } catch (error) {
+        status.textContent = error.message;
+    } finally {
+        submitButton.disabled = false;
+    }
 });

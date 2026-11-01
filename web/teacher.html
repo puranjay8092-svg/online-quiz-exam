@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Dashboard | Online Quiz System</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .dashboard {
+            width: min(1000px, 94%);
+            margin: 30px auto;
+        }
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 16px;
+            margin: 24px 0;
+        }
+
+        .summary-card {
+            padding: 20px;
+            border-radius: 10px;
+            background: #eef4ff;
+            color: #183153;
+        }
+
+        .summary-card h3 {
+            margin-top: 0;
+        }
+
+        .summary-card p {
+            font-size: 1.7rem;
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            background: white;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #183153;
+            color: white;
+        }
+
+        .dashboard button {
+            margin: 8px 8px 16px 0;
+        }
+
+        .message {
+            margin: 12px 0;
+        }
+
+        #questionManagement {
+            margin-top: 32px;
+        }
+
+        #questionForm {
+            display: grid;
+            gap: 10px;
+            max-width: 650px;
+            margin-bottom: 20px;
+        }
+
+        #questionForm input,
+        #questionForm textarea,
+        #questionForm select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 10px;
+            border: 1px solid #bbb;
+            border-radius: 6px;
+            font: inherit;
+        }
+
+        .question-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+        }
+
+        .question-card button {
+            margin-top: 8px;
+        }
+
+        .question-options {
+            padding-left: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Teacher Dashboard</h1>
+        <p>Online Quiz and Examination System</p>
+    </header>
+
+    <main class="dashboard">
+        <h2>Student Results</h2>
+        <p>Review submitted examination scores.</p>
+
+        <button id="refreshBtn" type="button">Refresh Results</button>
+        <button id="exportBtn" type="button">Download CSV</button>
+        <button id="logoutBtn" type="button">Log out</button>
+        <a href="/">Back to Student Quiz</a>
+
+        <p id="message" class="message" role="status">
+            Loading student results...
+        </p>
+
+        <section class="summary">
+            <div class="summary-card">
+                <h3>Total Submissions</h3>
+                <p id="totalSubmissions">0</p>
+            </div>
+
+            <div class="summary-card">
+                <h3>Average Score</h3>
+                <p id="averageScore">0/3</p>
+            </div>
+        </section>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Rank</th>
+                        <th>Student Name</th>
+                        <th>Student ID</th>
+                        <th>Score</th>
+                        <th>Percentage</th>
+                        <th>Submitted At</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsBody">
+                    <tr>
+                        <td colspan="5">Loading...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <hr>
+
+        <section id="questionManagement">
+            <h2>Question Management</h2>
+            <p>Add questions, change existing questions, or delete questions from the quiz.</p>
+
+            <form id="questionForm">
+                <input type="hidden" id="questionId">
+
+                <label for="questionText">Question</label>
+                <textarea id="questionText" required rows="3" placeholder="Enter the question"></textarea>
+
+                <label for="option0">Option A</label>
+                <input id="option0" type="text" required>
+
+                <label for="option1">Option B</label>
+                <input id="option1" type="text" required>
+
+                <label for="option2">Option C</label>
+                <input id="option2" type="text" required>
+
+                <label for="option3">Option D</label>
+                <input id="option3" type="text" required>
+
+                <label for="correctAnswer">Correct answer</label>
+                <select id="correctAnswer" required>
+                    <option value="0">Option A</option>
+                    <option value="1">Option B</option>
+                    <option value="2">Option C</option>
+                    <option value="3">Option D</option>
+                </select>
+
+                <button type="submit" id="saveQuestionBtn">Add Question</button>
+                <button type="button" id="cancelEditBtn" hidden>Cancel Edit</button>
+            </form>
+
+            <p id="questionMessage" class="message" role="status"></p>
+
+            <h3>Existing Questions</h3>
+            <div id="questionsList">
+                <p>Loading questions...</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script src="teacher.js"></script>
+</body>
+
+</html>
