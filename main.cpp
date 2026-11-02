@@ -5,29 +5,40 @@
 #include <vector>
 #include <fstream>
 #include <iomanip>
+#include <memory>
 
+// Abstract base class: defines the common interface for all question types.
 class Question {
+public:
+    virtual ~Question() = default;
+
+    virtual void display(int number) const = 0;
+    virtual bool checkAnswer(int answer) const = 0;
+};
+
+// Derived class: implements the multiple-choice question behaviour.
+class MCQQuestion : public Question {
 private:
     std::string text;
     std::array<std::string, 4> options;
     int correctOption;
 
 public:
-    Question(std::string questionText,
-             std::array<std::string, 4> choices,
-             int answer)
+    MCQQuestion(std::string questionText,
+                std::array<std::string, 4> choices,
+                int answer)
         : text(questionText),
           options(choices),
           correctOption(answer) {}
 
-    void display(int number) const {
+    void display(int number) const override {
         std::cout << "\nQ" << number << ". " << text << "\n";
         for (int i = 0; i < 4; i++) {
             std::cout << i + 1 << ". " << options[i] << "\n";
         }
     }
 
-    bool checkAnswer(int answer) const {
+    bool checkAnswer(int answer) const override {
         return answer == correctOption;
     }
 };
@@ -77,11 +88,11 @@ public:
 
 class Exam {
 private:
-    std::vector<Question> questions;
+    std::vector<std::unique_ptr<Question>> questions;
 
 public:
-    void addQuestion(const Question& question) {
-        questions.push_back(question);
+    void addQuestion(std::unique_ptr<Question> question) {
+        questions.push_back(std::move(question));
     }
 
     Result start(const std::string& name,
@@ -89,7 +100,7 @@ public:
         int score = 0;
 
         for (int i = 0; i < static_cast<int>(questions.size()); i++) {
-            questions[i].display(i + 1);
+            questions[i]->display(i + 1);
 
             int answer;
             std::cout << "Your answer (1-4): ";
@@ -105,7 +116,7 @@ public:
                 return Result(name, studentId, 0, 0);
             }
 
-            if (questions[i].checkAnswer(answer)) {
+            if (questions[i]->checkAnswer(answer)) {
                 std::cout << "Correct!\n";
                 score++;
             } else {
@@ -182,17 +193,17 @@ int main() {
 
         Exam exam;
 
-        exam.addQuestion(Question(
+        exam.addQuestion(std::make_unique<MCQQuestion>(
             "Which language are we using?",
-            {"Python", "C++", "Java", "JavaScript"}, 2
+            std::array<std::string, 4>{"Python", "C++", "Java", "JavaScript"}, 2
         ));
-        exam.addQuestion(Question(
+        exam.addQuestion(std::make_unique<MCQQuestion>(
             "Which keyword defines a class in C++?",
-            {"function", "object", "class", "define"}, 3
+            std::array<std::string, 4>{"function", "object", "class", "define"}, 3
         ));
-        exam.addQuestion(Question(
+        exam.addQuestion(std::make_unique<MCQQuestion>(
             "Which symbol ends most C++ statements?",
-            {".", ";", ":", ","}, 2
+            std::array<std::string, 4>{".", ";", ":", ","}, 2
         ));
 
         Result result = exam.start(name, id);
